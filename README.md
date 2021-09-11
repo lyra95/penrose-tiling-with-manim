@@ -1,0 +1,1 @@
+`manim -pql scene.py [output-file-name]` to excute
