@@ -1,1 +1,1 @@
-`manim -pql scene.py [output-file-name]` to excute
+`manim -pql scene.py penroseOne` to excute
