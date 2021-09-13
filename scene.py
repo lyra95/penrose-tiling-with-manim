@@ -22,29 +22,35 @@ class Pentagon:
         self.boundary = boundary
         self.com = boundary.get_center_of_mass()
 
-    def nextGen(self):
-        g = Group().add(self.group)
-        for p in self.boundary.get_vertices():
-            g.add(self.group.copy().rotate(ROTATION_ANGLE, about_point=p))
-        self.group = g
-        self.boundary.rotate(
-            math.pi, about_point=self.com).scale_about_point(SCALE, self.com)
+def nextGen(first: Union[Pentagon,None], second: Pentagon):
+    g = Group().add(second.group)
+    if first == None:
+        for p in second.boundary.get_vertices():
+            g.add(second.group.copy().rotate(ROTATION_ANGLE, about_point=p))
+    else:
+        for p in second.boundary.get_vertices():
+            g.add(second.group.copy().rotate(ROTATION_ANGLE, about_point=p))
+            g.add(first.group.copy().rotate(math.pi, about_point=p))
+
+    return Pentagon(g,
+        second.boundary.copy().rotate(math.pi, about_point=second.com).scale_about_point(SCALE, second.com))
 
 
-GEN_ZERO_RADIUS = 0.125
+GEN_ZERO_RADIUS = 0.2
 START_ANGLE = math.pi/10.0
 BOUNDARY_COLOR = "GREEN"
-DEPTH = 3
+DEPTH = 2
 
 class PenroseOne(Scene):
     def construct(self):
         p = RegularPolygon(5, radius=GEN_ZERO_RADIUS,
                            start_angle=START_ANGLE, color=BOUNDARY_COLOR)
         # p.set_fill(PURE_GREEN, opacity=1.0)
-        gen = Pentagon(Group(p), p.copy())
+        first = None
+        second = Pentagon(Group(p), p.copy())
         for _ in range(DEPTH):
-            gen.nextGen()
-            self.show(gen)
+            second, first = nextGen(first, second), second
+            self.show(second)
 
     def show(self, gen: Pentagon):
         # self.play(FadeIn(gen.group))
