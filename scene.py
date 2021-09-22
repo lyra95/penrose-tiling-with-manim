@@ -2,8 +2,11 @@ from manim import *
 import math
 from typing import *
 
+# Set this by invoking makefile target 'set'
+DEPTH=7
+
+# For the future work
 # class Crown:
-#     x
 
 # class Star:
 
@@ -35,11 +38,9 @@ def nextGen(first: Union[Pentagon,None], second: Pentagon):
     return Pentagon(g,
         second.boundary.copy().rotate(math.pi, about_point=second.com).scale_about_point(SCALE, second.com))
 
-
 GEN_ZERO_RADIUS = 0.2
 START_ANGLE = math.pi/10.0
 BOUNDARY_COLOR = "GREEN"
-DEPTH = 2
 
 class PenroseOne(Scene):
     def construct(self):
